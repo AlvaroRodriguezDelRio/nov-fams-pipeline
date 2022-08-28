@@ -18,7 +18,7 @@ Map gene families against reference databases for isolating those exclusive on u
 
 - PfamA with the command ```hmmsearch --cpu 10 --tblout mappings.tab /data/Pfam/Pfam-32-A/Pfam-A.hmm multifasta.faa```. We considered as significant any hit with E-value < 1e-5. 
 
-- PfamB: with the command ```/scratch/alvaro/DEEM/analysis/mappings_db/pfamB/scripts/hmmsearch.sh```. We considered as significant any hit with E-value < 1e-5. !!!!!!!!!!!!!!!!!!!!
+- PfamB: with the command ```hmmsearch --tblout mappings.tab multifasta.faa```. We considered as significant any hit with E-value < 1e-5. 
 
 - RefSeq with the command ```diamond blastx -d /data/RefSeq/refseq.dmnd -q multifasta.cds -o results.tab --outfmt 6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qcovhsp scovhsp qlen slen --sensitive```. Hits with an E-value < 1e-3 and query coverage > 50% were considered significant
 
@@ -28,13 +28,13 @@ We considered as novel gene families those with no significant hits to any of th
 
 For dealineating the novel gene family predictions of higher quality, we conducted a series of analysis, for which we needed to create individual fasta files with the i) CDS sequences and ii) Protein sequences of each gene family. 
 
-- For calculating conserved domains, multiple sequence alignments need to be computed on each family. For such purpose, we used clustalO: 
+- For calculating conserved domains, multiple sequence alignments need to be computed on each family. For such purpose, we used clustal omega (http://www.clustal.org/omega/): 
 
-``` clustalo command```
+```clustalo -i gene_family_protein_fasta.faa -o gene_family_protein_fasta.alg.faa```
 
 After having collected all the protein alignments, domain conservation can be calculated by running:
 
- ```python XXXXXX ```
+ ```python alg_quality.py paths_algs.txt```
  
 - For discarding viral sequences from the novel gene familes, we mapped the protein sequences against the PVOGs database (https://ftp.ncbi.nlm.nih.gov/pub/kristensen/pVOGs/home.html). 
 
