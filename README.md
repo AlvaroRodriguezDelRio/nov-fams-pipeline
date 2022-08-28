@@ -26,9 +26,11 @@ We considered as novel gene families those with no significant hits to any of th
 
 For reconstructing genomic contexts: 
 
-- 
+- Get an ordered list of the genes within each contig with ```python neighs_per_contig.py paths_gffs.txt > neighs_per_contig.tab```
 
-get a list with all the genes within each genome and contig (python /scratch/alvaro/DEEM/analysis/neighs/build_neighbours_per_contig/scripts/neighs_per_contig.py paths_gffs.txt > neighs_per_contig.tab  (input is, for instance,  /scratch/alvaro/DEEM/analysis/data/paths_gff.txt)).
+-----(input is, for instance,  /scratch/alvaro/DEEM/analysis/data/paths_gff.txt)).
+------ /scratch/alvaro/DEEM/analysis/neighs/build_neighbours_per_contig/scripts/neighs_per_contig.py
+
 update them to a mongo collection: python /scratch/alvaro/DEEM/analysis/build_db/scripts/neigh2json.py neighs_per_contig.tab [...] | mongoimport --host fat01 -d XXX -c neighs --drop. If you want to reconstruct the genomic context of the extended families, you also need to input the neigh_per_contig.tab file for the 169k genomes (/data/jhc/cold/MAGs/GEM-fixed_genomes/neighs_per_contig.tab /data/jhc/cold/MAGs/GMGC-v1/high-q/neighs_per_contig.r.tab /data/jhc/freezer/public/GTDB/GTDB_rev95/neighs_per_contig.no_dups.tab /data/jhc/cold/MAGs/Ocean-v1/neighs_per_contig.tab /data/jhc/cold/MAGs/UHGG-v1/neighs_per_contig.tab). 
 Get name of all neighbors of the genes in the novel families (only needed if reconstructing the genomic context after expanding, for getting the emapper annotations of the genes from the 169k genomes) with python  /scratch/alvaro/DEEM/analysis/neighs/scripts/get_names_neigh_genes.py > neigh_genes.txt (gets as input gene family composition after extending). 
 Get mongo collection with the functional annotation of all neighbors (including those in the 169k genomes, this script looks for the annotations of the genes in the neigh_genes.txt list in a database containing the annotations of those genomes. if given an empty list, it will only get the funct annotation from the eggnogmapper_out.tab file): python /scratch/alvaro/DEEM/analysis/build_db/scripts/emapper.py eggnogmapper_out.tab | mongoimport --host fat01 -d DATABASE_NAME -c emapper2 --drop (emapper-2.1.5 output). 
