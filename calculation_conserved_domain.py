@@ -40,10 +40,7 @@ def get_domain_len(line):
                         max_consecutive = (consecutive)
 
 
-        #total_number_no_gaps = sum (1 for i in number_no_gaps if float(number_no_gaps[i]) > float(number_seqs)*0.8)
         cluster_name = line.split('/')[-1]
-        #print ("%s\t%s\t%s" %(cluster_name,float(max_consecutive)/float(alg_len), max_consecutive))
-        print (cluster_name,alg_len)
         return (cluster_name,float(max_consecutive)/float(alg_len), max_consecutive)
 
 
