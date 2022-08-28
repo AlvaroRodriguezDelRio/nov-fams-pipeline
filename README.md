@@ -58,7 +58,7 @@ Later, we ran hyphy BUSTED (http://vision.hyphy.org/) for calculating the dN/dS 
 
 And RNAcode (https://github.com/ViennaRNA/RNAcode) for calculating their coding probability. Before running RNAcode, alignments need to be changed to MAF format, which can be done in python by importing SeqIO from the Bio package (```SeqIO.parse(sys.argv[1], "fasta"); SeqIO.write(records, sys.argv[1]+'.maf', "maf")```)
 
-```RNAcode command```
+```RNAcode gene_family_CDS_fasta.alg.cds.maf -t --stop-early -o RNAcode_out.tab```
 
 We only considered in our analysis novel gene families with a conserved domain of at least 20 residues, with no significant homolgy in the pVOGs and Antifam databases, , with dN/dS < 0.5 and with coding probability p-value < 0.05. 
 
