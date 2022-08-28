@@ -14,7 +14,7 @@ Run mmseqs for calculating the gene families on the concatenated proteomes of th
 
 Map gene families against reference databases for isolating those exclusive on uncultivated taxa.
 
-- EggNOG with eggnog-mapper. We used the following parameter combination: ```emapper.py -m diamond --itype proteins --no_file_comments -i multifasta.faa -o mappings.tab```. We considered as significant any hit with E-value < 1e-3. Eggnog annotations will also be useful for calculating the genomic context conservation of the gene families.
+- EggNOG with eggnog-mapper. We used the following parameter combination: ```emapper.py -m diamond --itype proteins --no_file_comments -i multifasta.faa -o mappings.tab```. We considered as significant any hit with E-value < 1e-3. Eggnog annotations will also be useful for calculating the genomic context conservation of the gene families. For retreaving the annotations, we ran the command ```emapper annotations```. 
 
 - PfamA with the command ```hmmsearch --cpu 10 --tblout mappings.tab /data/Pfam/Pfam-32-A/Pfam-A.hmm multifasta.faa```. We considered as significant any hit with E-value < 1e-5. 
 
@@ -60,9 +60,11 @@ And RNAcode (https://github.com/ViennaRNA/RNAcode) for calculating their coding 
 
 ```RNAcode command```
 
+We only considered in our analysis novel gene families with a conserved domain of at least 20 residues, with no significant homolgy in the pVOGs and Antifam databases, , with dN/dS < 0.5 and with coding probability p-value < 0.05. 
+
 ## Reconstructing the genomic context of novel gene families 
 
-For reconstructing genomic contexts: 
+For reconstructing the genomic context of the novel gene families, we followed the subsequent steps: 
 
 - Get an ordered list of the genes within each contig with ```python neighs_per_contig.py paths_gffs.txt > neighs_per_contig.tab```
 
@@ -71,7 +73,7 @@ For reconstructing genomic contexts:
 
 - Update this data to a Mongo collection with  ```python /scratch/alvaro/DEEM/analysis/build_db/scripts/neigh2json.py neighs_per_contig.tab | mongoimport --host fat01 -d XXX -c neighs --drop```. CHANGE FOR ALSO LOADING DATA INTO MEMORY????
 
-- Create a Mongo collection with the functional annotation of the neighbors of the members of each gene family: ```python /scratch/alvaro/DEEM/analysis/build_db/scripts/emapper.py eggnogmapper_out.tab | mongoimport --host fat01 -d DATABASE_NAME -c emapper2 --drop (emapper-2.1.5 output).```
+- Create a Mongo collection with the functional annotation of the neighbors of the members of each gene family: ```python /scratch/alvaro/DEEM/analysis/build_db/scripts/emapper.py eggnogmapper_out.tab | mongoimport --host fat01 -d DATABASE_NAME -c emapper2 --drop (emapper-2.1.5 output).```.  CHANGE FOR ALSO LOADING DATA INTO MEMORY????
 
 - Calculate genomic context conservation:
 
