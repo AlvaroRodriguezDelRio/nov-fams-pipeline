@@ -52,7 +52,6 @@ with open(sys.argv[1]) as file1:
             if db != 'unknown':
                 lines.append(line)
 
-        #print (fam,more_x_nucleotide_distance)
 
         # accumulate high distances until the anchor
         # if the -3 is far from -2, and -2 is far from -1, then -3 is 'double distant'
@@ -74,7 +73,6 @@ with open(sys.argv[1]) as file1:
 
         added_cogs = set() # avoid reporting for the same family and por the same cogs several times
         fam2info = defaultdict(lambda:[])
-        #print (fam,more_x_nucleotide_distance)
         for line in lines:
             fam,pos,db,annot,number_genes_with_annot,number_genes_per_pos,nseqs_fam,positions_annot,positions_annot_contrary,espace,num_contrary_strand = list(map(str.strip,line.split('\t')))
             fam2info['fam'] = fam
