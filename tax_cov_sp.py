@@ -3,19 +3,18 @@ from collections import defaultdict,Counter
 
 lin2num = Counter()
 genome2t = {}
-for f in ['/data/jhc/cold/MAGs/combined/genome2taxonomy.r202.tab','../data/genome2taxonomy.custom.tab']:
-    for line in open(f):
-        genome,tax = list(map(str.strip,line.split('\t')))
-        genome2t[genome] = tax
-        genome2t[genome.split('.')[0]] = tax
-        t_comb = []
-        # number of genomes per lin (for calculating coverage)
-        for t in tax.split(';'):
-            t_comb.append(t)
-            lin2num[';'.join(t_comb)] += 1
+for line in open(sys.argv[1]):
+    genome,tax = list(map(str.strip,line.split('\t')))
+    genome2t[genome] = tax
+    genome2t[genome.split('.')[0]] = tax
+    t_comb = []
+    # number of genomes per lin (for calculating coverage)
+    for t in tax.split(';'):
+        t_comb.append(t)
+        lin2num[';'.join(t_comb)] += 1
 
 fam2genomes = defaultdict(lambda:set())
-for line in open(sys.argv[1]):
+for line in open(sys.argv[2]):
     fam,n,mems = list(map(str.strip,line.split('\t')))
     n = len(mems.split(','))
     for m in mems.split(','):
