@@ -66,10 +66,16 @@ We only considered in our analysis novel gene families with a conserved domain o
 
 For reconstructing the genomic context of the novel gene families, we followed the subsequent steps: 
 
-- Get an ordered list of the genes within each contig with ```python neighs_per_contig.py paths_gffs.txt > neighs_per_contig.tab```
+- Get an ordered list of the genes within each contig with ```python genes_per_contig.py paths_gffs.txt > neighs_per_contig.tab```
 
------(input is, for instance,  /scratch/alvaro/DEEM/analysis/data/paths_gff.txt)).
------- /scratch/alvaro/DEEM/analysis/neighs/build_neighbours_per_contig/scripts/neighs_per_contig.py
+The ```paths_gffs.txt``` file contains the gff files of all the genomes with the gene prediction information, for instance:
+
+```
+gnl|DEEM|Chip-388_95C1R_METABAT_1       prokka  gene    85      783     .       +       .       ID=Chip-388_95C1R_METABAT_00001_gene;Name=tssA_1;gene=tssA_1;locus_tag=Chip-388_95C1R_METABAT_00001
+gnl|DEEM|Chip-388_95C1R_METABAT_1       prokka  mRNA    85      783     .       +       .       ID=Chip-388_95C1R_METABAT_00001_mRNA;Name=tssA_1;gene=tssA_1;locus_tag=Chip-388_95C1R_METABAT_00001
+gnl|DEEM|Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     .       +       0       ID=Chip-388_95C1R_METABAT_00001;Parent=Chip-388_95C1R_METABAT_00001_gene,Chip-388_95C1R_METABAT_00001_mRNA;eC_number=2.8.1.1;Name=tssA_1;db_xref=COG:COG2897;gene=tssA_1;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:D4GYM0;locus_tag=Chip-388_95C1R_METABAT_00001;product=Putative thiosulfate sulfurtransferase;protein_id=gnl|DEEM|Chip-388_95C1R_METABAT_00001
+```
+
 
 - Update this data to a Mongo collection with  ```python /scratch/alvaro/DEEM/analysis/build_db/scripts/neigh2json.py neighs_per_contig.tab | mongoimport --host fat01 -d XXX -c neighs --drop```. CHANGE FOR ALSO LOADING DATA INTO MEMORY????
 
