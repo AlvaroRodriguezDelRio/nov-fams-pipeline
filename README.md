@@ -1,6 +1,8 @@
 # nov-fams-pipeline
 
-The pipeline for calculating novel families & analyze them include the following steps. The parameters used (ie. mapping thresholds etc are in https://www.biorxiv.org/content/10.1101/2022.01.26.477801v1.full). The scripts assume that the gene names are formatted as >source@genome@gene@domain|phylum 
+Here we present the pipeline for computing novel gene families from the proteomes of a collection of genomes, and how to calculate their genomic context conservation. The scripts presented here assume that the gene names are formatted as >source_of_isolation@genome_name@gene_name@domain|phylum 
+
+## Deep homology-based protein clustering
 
 run mmseqs for calculating the gene families on the proteome of interest
 mapping the families against:
