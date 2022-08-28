@@ -83,7 +83,7 @@ gnl|DEEM|Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     
 - Calculate genomic context conservation:
 
 1) Precompute:
-```python neigh_cons_score.py extended_gene_family_composition.tab > scores.tab``` 
+```python neigh_cons_score.py gene_family_composition.tab > scores.tab```. The ```gene_family_composition.tab``` file is a tab delimeted file with 3 columns: the gene family name, number of members and coma-separated list of members.
 
 2) Get genomic context conservation in tabular format:
 
@@ -93,5 +93,4 @@ gnl|DEEM|Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     
 
 For calculating the taxonomic coverage and specificity for each gene family on each taxonomic group, use:
 
-```python tax_cov_sp.py family_composition.tab > sp_cov_per_fam_per_lin.tab.```. The ```family_composition.tab``` file is a tab delimeted file with 3 columns: the gene family name, number of members and coma-separated list of members.
-
+```python tax_cov_sp.py genome_tax_annotation.tab gene_family_composition.tab > sp_cov_per_fam_per_lin.tab.```. The ```genome_tax_annotation.tab``` file is a tab-delimeted file with 2 columns: genome name and their gtdb annotations. 
