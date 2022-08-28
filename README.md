@@ -93,7 +93,5 @@ gnl|DEEM|Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     
 
 For calculating the taxonomic coverage and specificity for each gene family on each taxonomic group, use:
 
-```python  family_composition.tab > sp_cov_per_fam_per_lin.tab.```. The ```family_composition.tab``` file is a tab delimeted file with 3 columns: the gene family name, number of members and coma-separated list of members.
-
-The script also reads from taxonomic annotation per genome files (needs to be changed in the script for your custom genomes, the tax annota for the 169k genomes file is already read by the script. #CHANGE IN SCRIPT FOR READING STDIN#
+```python tax_cov_sp.py family_composition.tab > sp_cov_per_fam_per_lin.tab.```. The ```family_composition.tab``` file is a tab delimeted file with 3 columns: the gene family name, number of members and coma-separated list of members.
 
