@@ -1,6 +1,6 @@
-# Pipelone for novel family computation and analysis
+# Pipeline for novel family computation and analysis
 
-Here we present the pipeline for computing novel gene families from the proteomes of a collection of genomes, and how to calculate their genomic context conservation. 
+Here we present the pipeline for computing novel gene families from the proteomes of a collection of genomes, and how to calculate their genomic context conservation.
 
 The scripts presented here assume that the gene names are formatted as >genome_source_of_isolation@genome_name@gene_name@domain|phylum
 
@@ -24,7 +24,7 @@ We considered as novel gene families those with no significant hits to any of th
 
 ## Filtering novel gene families 
 
-
+For dealineating the novel gene family predictions of higher quality, we conducted a series of analysis.   
 
 ## Reconstructing the genomic context of novel gene families 
 
@@ -41,14 +41,14 @@ For reconstructing genomic contexts:
 
 - Calculate genomic context conservation:
 
--- Precompute:
+1) Precompute:
 ```python  /scratch/alvaro/DEEM/analysis/neighs/scripts/score_per_pos.strand.unknown_genes.space.py extended_gene_family_composition.tab > scores.tab;``` 
 
--- Genomic context conservation in json format.
+2) Genomic context conservation in json format.
 ```python /scratch/alvaro/DEEM/analysis/neighs/scripts/score_per_pos.strand2json.espace.py scores.tab > scores.json;```
 
--- Genomic context conservation in tabular format
-```python/scratch/alvaro/DEEM/analysis/neighs/scripts/score_per_pos.strand2table.py > scores.tab``` (fields: family name, db, functional_term, position, score, % cont strand, % contrary strand in between the novel genes and the genes with the functional term, % genes separated more than 100nts in between the novel gene and the neighbors, description).
+3) Genomic context conservation in tabular format
+```python/scratch/alvaro/DEEM/analysis/neighs/scripts/score_per_pos.strand2table.py > scores.tab```. The fields in the table are: family name, db, functional_term, position, score, % cont strand, % contrary strand in between the novel genes and the genes with the functional term, % genes separated more than 100nts in between the novel gene and the neighbors, description.
 
 ## Gene family taxonomic coverage and specificity
 
