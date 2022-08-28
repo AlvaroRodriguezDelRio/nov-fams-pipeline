@@ -26,7 +26,33 @@ We considered as novel gene families those with no significant hits to any of th
 
 ## Filtering novel gene families 
 
-For dealineating the novel gene family predictions of higher quality, we conducted a series of analysis.   
+For dealineating the novel gene family predictions of higher quality, we conducted a series of analysis. For conducting these analysis, you will need to create individual fasta files with the i) CDS sequences and ii) Protein sequences of each gene family. 
+
+- For calculating conserved domains, multiple sequence alignments need to be computed on each family. For such purpose, we used clustalO on each protein fasta file: 
+
+``` clustalo command```
+
+After having collected all the protein alignmetns, domain conservation can be calculated by running:
+
+ ```python XXXXXX ```
+ 
+- For discarding viral sequences, the protein sequences can be mapped against the PVOGs database ().
+
+``` COMMAND ```
+
+- For discarding sporious sequences, the protein sequences can be mapped against the Antifam database ()
+
+- For calculating the dN/dS and coding probability of each gene family, we built protein alignments, back translated them to nucleotides, and calculated gene family trees with ETE: 
+
+```ETE command```
+
+Later, we ran hyphy BUSTED for calculating the dN/dS of each gene family:
+
+```BUSTED command```
+
+And RNAcode for calculating their coding probability:
+
+```RNAcode command```
 
 ## Reconstructing the genomic context of novel gene families 
 
