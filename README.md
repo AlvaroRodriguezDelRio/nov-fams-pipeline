@@ -76,9 +76,9 @@ gnl|DEEM|Chip-388_95C1R_METABAT_1       prokka  mRNA    85      783     .       
 gnl|DEEM|Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     .       +       0       ID=Chip-388_95C1R_METABAT_00001;Parent=Chip-388_95C1R_METABAT_00001_gene,Chip-388_95C1R_METABAT_00001_mRNA;eC_number=2.8.1.1;Name=tssA_1;db_xref=COG:COG2897;gene=tssA_1;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:D4GYM0;locus_tag=Chip-388_95C1R_METABAT_00001;product=Putative thiosulfate sulfurtransferase;protein_id=gnl|DEEM|Chip-388_95C1R_METABAT_00001
 ```
 
-- Update the ```neighs_per_contig.tab``` data to a Mongo (https://www.mongodb.com/) collection with  ```python neigh2json.py neighs_per_contig.tab | mongoimport --host fat01 -d XXX -c neighs --drop```. CHANGE FOR ALSO LOADING DATA INTO MEMORY????
+- Update the ```neighs_per_contig.tab``` data to a Mongo (https://www.mongodb.com/) collection with  ```python neigh2json.py neighs_per_contig.tab | mongoimport --host XXX -d XXX -c neighs --drop```. 
 
-- Create a Mongo collection with the functional annotation of the neighbors of the members of each gene family: ```python /scratch/alvaro/DEEM/analysis/build_db/scripts/emapper.py eggnogmapper_out.tab | mongoimport --host fat01 -d DATABASE_NAME -c emapper2 --drop (emapper-2.1.5 output).```.  CHANGE FOR ALSO LOADING DATA INTO MEMORY????
+- Create a Mongo collection with the functional annotation of the neighbors of the members of each gene family: ```python /scratch/alvaro/DEEM/analysis/build_db/scripts/emapper.py eggnogmapper_out.tab | mongoimport --host fat01 -d DATABASE_NAME -c emapper2 --drop (emapper-2.1.5 output).```.  
 
 - Calculate genomic context conservation:
 
