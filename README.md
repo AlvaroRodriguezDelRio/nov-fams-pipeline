@@ -6,28 +6,27 @@ The scripts presented here assume that the gene names are formatted as >genome_s
 
 ## Deep homology-based protein clustering
 
-Run mmseqs for calculating the gene families on the proteomes of interest (we applied  --min-seq-id 0.3 -c 0.5 --cov-mode 1 --cluster-mode 2 -e 0.001 parameters).
+Run mmseqs for calculating the gene families on the proteomes of interest (we used the  ```--min-seq-id 0.3 -c 0.5 --cov-mode 1 --cluster-mode 2 -e 0.001``` parameter combination).
 
 ## Detection of protein clusters specific from uncultivated taxa
 
 Map gene families against reference databases for isolating those exclusive on uncultivated taxa.
 
-- EggNOG with eggnog-mapper. We used the following command: ```emapper.py -m diamond --itype proteins --no_file_comments --cpu 5 -i multifasta.faa -o mappings.tab```).
+- EggNOG with eggnog-mapper. We used the following parameter combination: ```emapper.py -m diamond --itype proteins --no_file_comments --cpu 5 -i multifasta.faa -o mappings.tab```). Eggnog annotations will also be useful for calculating the genomic context conservation of the gene families. We considered as significant any hit with E-value < 1e-3.
 
+- PfamA with the command ```hmmsearch --cpu 10 --tblout mappings.tab /data/Pfam/Pfam-32-A/Pfam-A.hmm multifasta.faa```. We considered as significant any hit with E-value < 1e-5
 
-pfamA: with the command ml HMMER; hmmsearch --cpu 10 --tblout mappings.tab /data/jhc/freezer/public/Pfam/Pfam-32-A/Pfam-A.hmm multifasta.faa
-PfamB: as in this script: /scratch/alvaro/DEEM/analysis/mappings_db/pfamB/scripts/hmmsearch.sh
-refseq with blastx: command: /data/jhc/NCBI_nr/diamond blastx -d /data/jhc/freezer/public/RefSeq/refseq.dmnd -q multifasta.cds -o results.tab --outfmt 6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qcovhsp scovhsp qlen slen --sensitive -p 20
+- PfamB: with the command ```/scratch/alvaro/DEEM/analysis/mappings_db/pfamB/scripts/hmmsearch.sh```. We considered as significant any hit with E-value < 1e-5.
 
-After discarding families with significant hits to any of these databases, we end up with a collection of novel families. 
+- RefSeq with the command ```diamond blastx -d /data/RefSeq/refseq.dmnd -q multifasta.cds -o results.tab --outfmt 6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qcovhsp scovhsp qlen slen --sensitive```. Hits with an E-value < 1e-3 and query coverage > 50% were considered significant
 
-Extending against 169k genomes 
+We considered as novel gene families those with no significant hits to any of these databases.
 
-If you are interested in the distribution of the families across the prokaryotic diversity, you can map the novel families against 169k genomes with the /scratch/alvaro/DEEM/analysis/map_mgv1/scripts/diamond.sh script. This is not mandatory, but recommended, specially if interested in describing synapomorphies.  
-
-Reconstructing the genomic context of novel families 
+## Reconstructing the genomic context of novel families 
 
 For reconstructing genomic contexts: 
+
+- 
 
 get a list with all the genes within each genome and contig (python /scratch/alvaro/DEEM/analysis/neighs/build_neighbours_per_contig/scripts/neighs_per_contig.py paths_gffs.txt > neighs_per_contig.tab  (input is, for instance,  /scratch/alvaro/DEEM/analysis/data/paths_gff.txt)).
 update them to a mongo collection: python /scratch/alvaro/DEEM/analysis/build_db/scripts/neigh2json.py neighs_per_contig.tab [...] | mongoimport --host fat01 -d XXX -c neighs --drop. If you want to reconstruct the genomic context of the extended families, you also need to input the neigh_per_contig.tab file for the 169k genomes (/data/jhc/cold/MAGs/GEM-fixed_genomes/neighs_per_contig.tab /data/jhc/cold/MAGs/GMGC-v1/high-q/neighs_per_contig.r.tab /data/jhc/freezer/public/GTDB/GTDB_rev95/neighs_per_contig.no_dups.tab /data/jhc/cold/MAGs/Ocean-v1/neighs_per_contig.tab /data/jhc/cold/MAGs/UHGG-v1/neighs_per_contig.tab). 
