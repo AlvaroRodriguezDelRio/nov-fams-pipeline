@@ -34,29 +34,29 @@ For dealineating the novel gene family predictions of higher quality, we conduct
 
 After having collected all the protein alignments, domain conservation can be calculated by running:
 
- ```python alg_quality.py paths_algs.txt```
+ ```python calculation_conserved_domain.py paths_algs.txt```
  
 - For discarding viral sequences from the novel gene familes, we mapped the protein sequences against the PVOGs database (https://ftp.ncbi.nlm.nih.gov/pub/kristensen/pVOGs/home.html). 
 
-``` COMMAND ```
+```hmmsearch --tblout mappings.tab multifasta.faa```
 
 We considered hits with E-value < 1e-5 and minimum coverage of 50% as significant, and discarded families with significant hits.
 
 - For discarding sporious sequences, the protein sequences can be mapped against the Antifam database (https://ftp.sanger.ac.uk/pub/databases/Pfam/AntiFam/). 
 
-``` COMMAND```
+``` hmmsearch --cut_ga --tblout mappings_antifam.tab /data/Antifam/AntiFam.hmm multifasta.faa```
 
 We discarded families with any hit with E-value < 1e-5. 
 
 - For calculating the dN/dS and coding probability of each gene family, we built protein alignments, back translated them to nucleotides, and calculated gene family trees with the ETE toolkit (http://etetoolkit.org/): 
 
-```ETE command```
+```ete3 build -a gene_family_protein_fasta.faa -n gene_family_CDS_fasta.cds -o output_dir --nt-switch-threshold 0.0 --noimg -w clustalo_default-none-none-none``` (INCLUDE FASTTREE????)
 
 Later, we ran hyphy BUSTED (http://vision.hyphy.org/) for calculating the dN/dS of each gene family:
 
-```BUSTED command```
+```hyphy busted --alignment gene_family_CDS_fasta.alg.cds --tree gene_family.nw```
 
-And RNAcode (https://github.com/ViennaRNA/RNAcode) for calculating their coding probability:
+And RNAcode (https://github.com/ViennaRNA/RNAcode) for calculating their coding probability. Before running RNAcode, alignments need to be changed to MAF format, which can be done in python by importing SeqIO from the Bio package (```SeqIO.parse(sys.argv[1], "fasta"); SeqIO.write(records, sys.argv[1]+'.maf', "maf")```)
 
 ```RNAcode command```
 
