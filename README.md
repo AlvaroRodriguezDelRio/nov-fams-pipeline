@@ -69,7 +69,7 @@ For reconstructing genomic contexts:
 -----(input is, for instance,  /scratch/alvaro/DEEM/analysis/data/paths_gff.txt)).
 ------ /scratch/alvaro/DEEM/analysis/neighs/build_neighbours_per_contig/scripts/neighs_per_contig.py
 
-- Update this data to a Mongo collection with  ```python /scratch/alvaro/DEEM/analysis/build_db/scripts/neigh2json.py neighs_per_contig.tab [...] | mongoimport --host fat01 -d XXX -c neighs --drop```. CHANGE FOR ALSO LOADING DATA INTO MEMORY????
+- Update this data to a Mongo collection with  ```python /scratch/alvaro/DEEM/analysis/build_db/scripts/neigh2json.py neighs_per_contig.tab | mongoimport --host fat01 -d XXX -c neighs --drop```. CHANGE FOR ALSO LOADING DATA INTO MEMORY????
 
 - Create a Mongo collection with the functional annotation of the neighbors of the members of each gene family: ```python /scratch/alvaro/DEEM/analysis/build_db/scripts/emapper.py eggnogmapper_out.tab | mongoimport --host fat01 -d DATABASE_NAME -c emapper2 --drop (emapper-2.1.5 output).```
 
