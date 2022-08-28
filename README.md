@@ -1,12 +1,20 @@
 # nov-fams-pipeline
 
-Here we present the pipeline for computing novel gene families from the proteomes of a collection of genomes, and how to calculate their genomic context conservation. The scripts presented here assume that the gene names are formatted as >source_of_isolation@genome_name@gene_name@domain|phylum 
+Here we present the pipeline for computing novel gene families from the proteomes of a collection of genomes, and how to calculate their genomic context conservation. 
+
+The scripts presented here assume that the gene names are formatted as >genome_source_of_isolation@genome_name@gene_name@domain|phylum 
 
 ## Deep homology-based protein clustering
 
-run mmseqs for calculating the gene families on the proteome of interest
-mapping the families against:
-eggnog with eggnog-mapper (I used this command: emapper.py -m diamond --itype proteins --no_file_comments --cpu 5 -i multifasta.faa -o mappings.tab --override). 
+Run mmseqs for calculating the gene families on the proteomes of interest (we applied  --min-seq-id 0.3 -c 0.5 --cov-mode 1 --cluster-mode 2 -e 0.001 parameters).
+
+## Detection of protein clusters specific from uncultivated taxa
+
+Map gene families against reference databases for isolating those exclusive on uncultivated taxa.
+
+- EggNOG with eggnog-mapper. We used the following command: ```emapper.py -m diamond --itype proteins --no_file_comments --cpu 5 -i multifasta.faa -o mappings.tab```).
+
+
 pfamA: with the command ml HMMER; hmmsearch --cpu 10 --tblout mappings.tab /data/jhc/freezer/public/Pfam/Pfam-32-A/Pfam-A.hmm multifasta.faa
 PfamB: as in this script: /scratch/alvaro/DEEM/analysis/mappings_db/pfamB/scripts/hmmsearch.sh
 refseq with blastx: command: /data/jhc/NCBI_nr/diamond blastx -d /data/jhc/freezer/public/RefSeq/refseq.dmnd -q multifasta.cds -o results.tab --outfmt 6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qcovhsp scovhsp qlen slen --sensitive -p 20
