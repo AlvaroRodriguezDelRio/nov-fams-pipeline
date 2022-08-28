@@ -12,13 +12,13 @@ Run mmseqs for calculating the gene families on the concatenated proteomes of th
 
 ## Detection of protein clusters specific from uncultivated taxa
 
-Map gene families against reference databases for isolating those exclusive on uncultivated taxa.
+We then mapped the gene families against the following reference databases for isolating those exclusive on uncultivated taxa.
 
-- EggNOG with eggnog-mapper. We used the following parameter combination: ```emapper.py -m diamond --itype proteins --no_file_comments -i multifasta.faa -o mappings.tab```. We considered as significant any hit with E-value < 1e-3. Eggnog annotations will also be useful for calculating the genomic context conservation of the gene families. For retreaving the annotations, we ran the command ```emapper annotations```. 
+- EggNOG with eggnog-mapper. We used the following parameter combination: ```emapper.py -m diamond --itype proteins --no_file_comments -i multifasta.faa -o mappings.tab```. We considered as significant any hit with E-value < 1e-3. 
 
 - PfamA with the command ```hmmsearch --cpu 10 --tblout mappings.tab /data/Pfam/Pfam-32-A/Pfam-A.hmm multifasta.faa```. We considered as significant any hit with E-value < 1e-5. 
 
-- PfamB: with the command ```hmmsearch --tblout mappings.tab multifasta.faa```. We considered as significant any hit with E-value < 1e-5. 
+- All the hmms within the PfamB collection with the command ```hmmsearch --tblout mappings.tab PfamB.hmm multifasta.faa```. We considered as significant any hit with E-value < 1e-5. 
 
 - RefSeq with the command ```diamond blastx -d /data/RefSeq/refseq.dmnd -q multifasta.cds -o results.tab --outfmt 6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qcovhsp scovhsp qlen slen --sensitive```. Hits with an E-value < 1e-3 and query coverage > 50% were considered significant
 
@@ -36,21 +36,21 @@ After having collected all the protein alignments, domain conservation can be ca
 
  ```python calculation_conserved_domain.py paths_algs.txt```
  
-- For discarding viral sequences from the novel gene familes, we mapped the protein sequences against the PVOGs database (https://ftp.ncbi.nlm.nih.gov/pub/kristensen/pVOGs/home.html). 
+- For discarding viral sequences from the novel gene familes, we mapped the protein sequences against all the hmms within the PVOGs database (https://ftp.ncbi.nlm.nih.gov/pub/kristensen/pVOGs/home.html). 
 
-```hmmsearch --tblout mappings.tab multifasta.faa```
+```hmmsearch --tblout mappings.tab PVOG_hmm.hmm multifasta.faa```
 
 We considered hits with E-value < 1e-5 and minimum coverage of 50% as significant, and discarded families with significant hits.
 
 - For discarding sporious sequences, the protein sequences can be mapped against the Antifam database (https://ftp.sanger.ac.uk/pub/databases/Pfam/AntiFam/). 
 
-``` hmmsearch --cut_ga --tblout mappings_antifam.tab /data/Antifam/AntiFam.hmm multifasta.faa```
+```hmmsearch --cut_ga --tblout mappings_antifam.tab /data/Antifam/AntiFam.hmm multifasta.faa```
 
 We discarded families with any hit with E-value < 1e-5. 
 
 - For calculating the dN/dS and coding probability of each gene family, we built protein alignments, back translated them to nucleotides, and calculated gene family trees with the ETE toolkit (http://etetoolkit.org/): 
 
-```ete3 build -a gene_family_protein_fasta.faa -n gene_family_CDS_fasta.cds -o output_dir --nt-switch-threshold 0.0 --noimg -w clustalo_default-none-none-none``` (INCLUDE FASTTREE????)
+```ete3 build -a gene_family_protein_fasta.faa -n gene_family_CDS_fasta.cds -o output_dir --nt-switch-threshold 0.0 --noimg -w clustalo_default-none-none-none```
 
 Later, we ran hyphy BUSTED (http://vision.hyphy.org/) for calculating the dN/dS of each gene family:
 
