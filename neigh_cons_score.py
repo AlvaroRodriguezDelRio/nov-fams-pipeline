@@ -7,8 +7,8 @@ import re
 
 
 def process_fam(line):
-    client = MongoClient('10.0.3.1')
-    db = client['DEEM']
+    client = MongoClient('CLIENT CODE')
+    db = client['DB_NAME']
     col_emapper = db.emapper2
     col_neighs = db.neighs
 
