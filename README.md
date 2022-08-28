@@ -87,7 +87,7 @@ gnl|DEEM|Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     
 
 2) Get genomic context conservation in tabular format:
 
-```python /scratch/alvaro/DEEM/analysis/neighs/scripts/score_per_pos.strand2table.py > final_scores.tab```. The fields in the table are: family name, db, functional_term, position, score, % cont strand, % contrary strand in between the novel genes and the genes with the functional term, % genes separated more than 100nts in between the novel gene and the neighbors, description.
+```python genomic_context_conservation_table.py > final_scores.tab```. The fields in the table are: family name, db, functional_term, position, score, % cont strand, % contrary strand in between the novel genes and the genes with the functional term, % genes separated more than 100nts in between the novel gene and the neighbors, description.
 
 ## Gene family taxonomic coverage and specificity
 
