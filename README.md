@@ -83,7 +83,7 @@ gnl|DEEM|Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     
 - Calculate genomic context conservation:
 
 1) Precompute:
-```python  /scratch/alvaro/DEEM/analysis/neighs/scripts/score_per_pos.strand.unknown_genes.space.py extended_gene_family_composition.tab > scores.tab``` 
+```python  neigh_cons_score.py extended_gene_family_composition.tab > scores.tab``` 
 
 2) Genomic context conservation in json format.
 ```python /scratch/alvaro/DEEM/analysis/neighs/scripts/score_per_pos.strand2json.espace.py scores.tab > final_scores.json```
@@ -95,7 +95,7 @@ gnl|DEEM|Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     
 
 For calculating the taxonomic coverage and specificity for each gene family on each taxonomic group, use:
 
-```python /scratch/alvaro/DEEM/analysis/taxonomic_analyses/scripts/get_coverage_sp.raw.py family_composition.tab > sp_cov_per_fam_per_lin.tab.```
+```python  family_composition.tab > sp_cov_per_fam_per_lin.tab.```. The ```family_composition.tab``` file is a tab delimeted file with 3 columns: the gene family name, number of members and coma-separated list of members.
 
 The script also reads from taxonomic annotation per genome files (needs to be changed in the script for your custom genomes, the tax annota for the 169k genomes file is already read by the script. #CHANGE IN SCRIPT FOR READING STDIN#
 
