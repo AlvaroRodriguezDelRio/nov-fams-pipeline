@@ -12,7 +12,7 @@ Run mmseqs for calculating the gene families on the concatenated proteomes of th
 
 Map gene families against reference databases for isolating those exclusive on uncultivated taxa.
 
-- EggNOG with eggnog-mapper. We used the following parameter combination: ```emapper.py -m diamond --itype proteins --no_file_comments --cpu 5 -i multifasta.faa -o mappings.tab```). Eggnog annotations will also be useful for calculating the genomic context conservation of the gene families. We considered as significant any hit with E-value < 1e-3.
+- EggNOG with eggnog-mapper. We used the following parameter combination: ```emapper.py -m diamond --itype proteins --no_file_comments -i multifasta.faa -o mappings.tab```. Eggnog annotations will also be useful for calculating the genomic context conservation of the gene families. We considered as significant any hit with E-value < 1e-3.
 
 - PfamA with the command ```hmmsearch --cpu 10 --tblout mappings.tab /data/Pfam/Pfam-32-A/Pfam-A.hmm multifasta.faa```. We considered as significant any hit with E-value < 1e-5. 
 
@@ -26,7 +26,7 @@ We considered as novel gene families those with no significant hits to any of th
 
 
 
-## Reconstructing the genomic context of novel families 
+## Reconstructing the genomic context of novel gene families 
 
 For reconstructing genomic contexts: 
 
@@ -50,14 +50,11 @@ For reconstructing genomic contexts:
 -- Genomic context conservation in tabular format
 ```python/scratch/alvaro/DEEM/analysis/neighs/scripts/score_per_pos.strand2table.py > scores.tab``` (fields: family name, db, functional_term, position, score, % cont strand, % contrary strand in between the novel genes and the genes with the functional term, % genes separated more than 100nts in between the novel gene and the neighbors, description).
 
-## Taxonomic coverage and specificity
+## Gene family taxonomic coverage and specificity
 
 For calculating the taxonomic coverage and specificity for each gene family on each taxonomic group, use:
 
 ```python /scratch/alvaro/DEEM/analysis/taxonomic_analyses/scripts/get_coverage_sp.raw.py family_composition.tab > sp_cov_per_fam_per_lin.tab.```
 
-The script also reads from taxonomic annotation per genome files (needs to be changed in the script for your custom genomes, the tax annota for the 169k genomes file is already read by the script. CHANGE IN SCRIPT FOR READING STDIN
+The script also reads from taxonomic annotation per genome files (needs to be changed in the script for your custom genomes, the tax annota for the 169k genomes file is already read by the script. #CHANGE IN SCRIPT FOR READING STDIN#
 
-## Get individual fasta per family, alignments and trees
-
-## 
