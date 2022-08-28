@@ -2,7 +2,7 @@
 
 Here we present the pipeline for computing novel gene families from the proteomes of a collection of genomes, and how to calculate their genomic context conservation.
 
-![Alt text](Capture.png?raw=true "Title")
+![Screenshot](Capture.png)
 
 The scripts presented here assume that the gene names are formatted as >genome_source_of_isolation@genome_name@gene_name@domain|phylum
 
