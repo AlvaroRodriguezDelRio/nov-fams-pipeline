@@ -1,4 +1,4 @@
-# Pipeline for novel family computation and analysis
+# Pipeline for novel gene family computation and characterization
 
 Here we present the pipeline for computing novel gene families from the proteomes of a collection of genomes, and how to calculate their genomic context conservation.
 
