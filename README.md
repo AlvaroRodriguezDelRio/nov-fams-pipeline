@@ -48,15 +48,17 @@ We considered hits with E-value < 1e-5 and minimum coverage of 50% as significan
 
 We discarded families with any hit with E-value < 1e-5. 
 
-- For calculating the dN/dS and coding probability of each gene family, we built protein alignments, back translated them to nucleotides, and calculated gene family trees with the ETE toolkit (http://etetoolkit.org/): 
+- For calculating the dN/dS and coding probability of each gene family, we ran gene family trees on the protein alignments with FastTree (default options), and back translated the protein alignments to nucleotides with the ETE toolkit (http://etetoolkit.org/) 
 
 ```ete3 build -a gene_family_protein_fasta.faa -n gene_family_CDS_fasta.cds -o output_dir --nt-switch-threshold 0.0 --noimg -w clustalo_default-none-none-none```
 
-Later, we ran hyphy BUSTED (http://vision.hyphy.org/) for calculating the dN/dS of each gene family:
+Later, we ran 
+
+-- hyphy BUSTED (http://vision.hyphy.org/) for calculating the dN/dS of each gene family:
 
 ```hyphy busted --alignment gene_family_CDS_fasta.alg.cds --tree gene_family.nw```
 
-And RNAcode (https://github.com/ViennaRNA/RNAcode) for calculating their coding probability. Before running RNAcode, alignments need to be changed to MAF format, which can be done in python by importing SeqIO from the Bio package (```SeqIO.parse(sys.argv[1], "fasta"); SeqIO.write(records, sys.argv[1]+'.maf', "maf")```)
+-- RNAcode (https://github.com/ViennaRNA/RNAcode) for calculating their coding probability. Before running RNAcode, alignments need to be changed to MAF format, which can be done in python by importing SeqIO from the Bio package (```SeqIO.parse(sys.argv[1], "fasta"); SeqIO.write(records, sys.argv[1]+'.maf', "maf")```)
 
 ```RNAcode gene_family_CDS_fasta.alg.cds.maf -t --stop-early -o RNAcode_out.tab```
 
