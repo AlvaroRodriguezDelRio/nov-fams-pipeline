@@ -16,17 +16,17 @@ We then mapped the gene families against the following reference databases for i
 
 - EggNOG with eggnog-mapper. We used the following parameter combination: ```emapper.py -m diamond --itype proteins --no_file_comments -i multifasta.faa -o mappings.tab```. We considered as significant any hit with E-value < 1e-3. 
 
-- PfamA with the command ```hmmsearch --cpu 10 --tblout mappings.tab /data/Pfam/Pfam-32-A/Pfam-A.hmm multifasta.faa```. We considered as significant any hit with E-value < 1e-5. 
+- PfamA with the command ```hmmsearch --tblout mappings.tab /data/Pfam/Pfam-32-A/Pfam-A.hmm multifasta.faa```. We considered as significant any hit with E-value < 1e-5. 
 
 - All the hmms within the PfamB collection with the command ```hmmsearch --tblout mappings.tab PfamB.hmm multifasta.faa```. We considered as significant any hit with E-value < 1e-5. 
 
 - RefSeq with the command ```diamond blastx -d /data/RefSeq/refseq.dmnd -q multifasta.cds -o results.tab --outfmt 6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qcovhsp scovhsp qlen slen --sensitive```. Hits with an E-value < 1e-3 and query coverage > 50% were considered significant
 
-We considered as novel gene families those with no significant hits to any of these databases.
+We considered as gene families exclusive from uncultivated taxa those with no member with significant hits to any of these databases.
 
-## Filtering novel gene families 
+## Unknown gene familiy from uncultivated taxa filtering filtering 
 
-For dealineating the novel gene family predictions of higher quality, we conducted a series of analysis, for which we needed to create individual fasta files with the i) CDS sequences and ii) Protein sequences of each gene family. 
+For dealineating the unknown gene family predictions of higher quality, we conducted a series of filtering steps, for which we needed to create individual fasta files with the i) CDS sequences and ii) Protein sequences of each gene family. 
 
 - For calculating conserved domains, multiple sequence alignments need to be computed on each family. For such purpose, we used clustal omega (http://www.clustal.org/omega/): 
 
@@ -35,16 +35,18 @@ For dealineating the novel gene family predictions of higher quality, we conduct
 After having collected all the protein alignments, domain conservation can be calculated by running:
 
  ```python calculation_conserved_domain.py paths_algs.txt```
+
+ We discarded gene families with a conserved domain shorter than 20 residues.
  
 - For discarding viral sequences from the novel gene familes, we mapped the protein sequences against all the hmms within the PVOGs database (https://ftp.ncbi.nlm.nih.gov/pub/kristensen/pVOGs/home.html). 
 
-```hmmsearch --tblout mappings.tab PVOG_hmm.hmm multifasta.faa```
+```hmmsearch --tblout mappings.tab PVOG.hmm multifasta.faa```
 
 We considered hits with E-value < 1e-5 and minimum coverage of 50% as significant, and discarded families with significant hits.
 
 - For discarding sporious sequences, the protein sequences can be mapped against the Antifam database (https://ftp.sanger.ac.uk/pub/databases/Pfam/AntiFam/). 
 
-```hmmsearch --cut_ga --tblout mappings_antifam.tab /data/Antifam/AntiFam.hmm multifasta.faa```
+```hmmsearch --cut_ga --tblout mappings_antifam.tab AntiFam.hmm  multifasta.faa```
 
 We discarded families with any hit with E-value < 1e-5. 
 
@@ -62,7 +64,7 @@ Later, we ran
 
 ```RNAcode gene_family_CDS_fasta.alg.cds.maf -t --stop-early -o RNAcode_out.tab```
 
-We only considered in our analysis novel gene families with a conserved domain of at least 20 residues, with no significant homolgy in the pVOGs and Antifam databases, , with dN/dS < 0.5 and with coding probability p-value < 0.05. 
+We only considered in our analysis novel gene families with a conserved domain of at least 20 residues, with no significant homolgy in the pVOGs and Antifam databases, , with dN/dS < 0.5 and with RNAcode p-value < 0.05. 
 
 ## Reconstructing the genomic context of novel gene families 
 
@@ -93,6 +95,6 @@ gnl|DEEM|Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     
 
 ## Gene family taxonomic coverage and specificity
 
-For calculating the taxonomic coverage and specificity for each gene family on each taxonomic group, use:
+For calculating the taxonomic coverage and specificity for each gene family on each taxonomic group, we used:
 
 ```python tax_cov_sp.py genome_tax_annotation.tab gene_family_composition.tab > sp_cov_per_fam_per_lin.tab.```. The ```genome_tax_annotation.tab``` file is a tab-delimeted file with 2 columns: genome name and their GTDB (https://gtdb.ecogenomic.org/) taxonomic annotations. ```sp_cov_per_fam_per_lin.tab``` is a tab-delimted file containing the following columns: gene family name, GTDB lineage, specificity, coverage, number of genomes within the GTDB lineage in the collection. 
