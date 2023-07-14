@@ -6,6 +6,11 @@ Here we present the pipeline for computing novel gene families from the proteome
 
 The scripts presented here assume that the gene names are formatted as ```>genome_source_of_isolation@genome_name@gene_name@domain|phylum```.
 
+
+## Requirements
+
+### Software
+
 ## Deep homology-based protein clustering
 
 Run mmseqs for calculating the gene families on the concatenated proteomes of the genomes of interest (we used the  ```--min-seq-id 0.3 -c 0.5 --cov-mode 1 --cluster-mode 2 -e 0.001``` parameter combination).
