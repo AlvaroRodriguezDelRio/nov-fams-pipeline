@@ -4,18 +4,34 @@ Here we present the pipeline for computing novel gene families from the proteome
 
 ![Pipeline for dealineating novel gene families exclusive of uncultivated taxa](Pipeline.png)
 
-The scripts presented here assume that the gene names are formatted as ```>genome_source_of_isolation@genome_name@gene_name@domain|phylum```.
+The starting point of this pipeline consist a the concatenated fasta file with the gene predictions for the genomes of interest. The scripts presented here assume that the gene names are formatted as ```>genome_source_of_isolation@genome_name@gene_name@domain|phylum```. 
 
 
 ## Requirements
 
 ### Software
 
+- MMseqs2: https://github.com/soedinglab/MMseqs2
+- diamond: https://github.com/bbuchfink/diamond
+- HMMER: http://hmmer.org/
+- clustalO: http://www.clustal.org/omega/
+- FastTree: http://www.microbesonline.org/fasttree/
+- ETE3: http://etetoolkit.org/download/
+- HyPhy: https://www.hyphy.org/
+- RNAcode: https://github.com/ViennaRNA/RNAcode
+- mongoDB: https://www.mongodb.com/
+- GTDB-Tk: https://github.com/Ecogenomics/GTDBTk
+
 ### Databases
+
+- RefSeq: https://www.ncbi.nlm.nih.gov/refseq/
+- EggNOG: http://eggnog5.embl.de/#/app/home
+- Pfam: http://pfam.xfam.org/
+- PVOGs: https://ftp.ncbi.nlm.nih.gov/pub/kristensen/pVOGs/home.html
 
 ## Deep homology-based protein clustering
 
-Run mmseqs for calculating the gene families on the concatenated proteomes of the genomes of interest (we used the  ```--min-seq-id 0.3 -c 0.5 --cov-mode 1 --cluster-mode 2 -e 0.001``` parameter combination).
+Run MMseqs2 for calculating the gene families on the concatenated proteomes of the genomes of interest (we used the  ```--min-seq-id 0.3 -c 0.5 --cov-mode 1 --cluster-mode 2 -e 0.001``` parameter combination).
 
 ## Detection of protein clusters specific from uncultivated taxa
 
@@ -87,9 +103,11 @@ gnl|DEEM|Chip-388_95C1R_METABAT_1       prokka  mRNA    85      783     .       
 gnl|DEEM|Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     .       +       0       ID=Chip-388_95C1R_METABAT_00001;Parent=Chip-388_95C1R_METABAT_00001_gene,Chip-388_95C1R_METABAT_00001_mRNA;eC_number=2.8.1.1;Name=tssA_1;db_xref=COG:COG2897;gene=tssA_1;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:D4GYM0;locus_tag=Chip-388_95C1R_METABAT_00001;product=Putative thiosulfate sulfurtransferase;protein_id=gnl|DEEM|Chip-388_95C1R_METABAT_00001
 ```
 
-- Update the ```neighs_per_contig.tab``` data to a Mongo (https://www.mongodb.com/) collection with  ```python neigh2json.py neighs_per_contig.tab | mongoimport --host HOST_NAME -d DATABASE_NAME -c neighs --drop```. 
+- Upload the ```neighs_per_contig.tab``` data to a Mongo (https://www.mongodb.com/) collection with  ```python neigh2json.py neighs_per_contig.tab | mongoimport --host HOST_NAME -d DATABASE_NAME -c neighs --drop```.  
 
-- Create a Mongo collection with the functional annotation of the neighbors of the members of each gene family: ```python emapper2json.py eggnogmapper_out.tab | mongoimport --host HOST_NAME -d DATABASE_NAME -c emapper2 --drop (emapper-2.1.5 output)```.  
+- Create a Mongo collection with the functional annotation of the neighbors of the members of each gene family: ```python emapper2json.py eggnogmapper_out.tab | mongoimport --host HOST_NAME -d DATABASE_NAME -c emapper2 --drop (emapper-2.1.5 output)```.
+
+  It is worth noting that creating Mongo databases may not be needed if working with a relatively low number of genomes. Then, the genomic context and gene functional information may be directly loaded into memory.  
 
 - Calculate genomic context conservation:
 
@@ -102,6 +120,6 @@ gnl|DEEM|Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     
 
 ## Gene family taxonomic coverage and specificity
 
-For calculating the taxonomic coverage and specificity for each gene family on each taxonomic group, we used:
+For running this step, you need to compute the taxonomy of the genomes with GTDB-tk. For calculating the taxonomic coverage and specificity for each gene family on each taxonomic group, we used:
 
 ```python tax_cov_sp.py genome_tax_annotation.tab gene_family_composition.tab > sp_cov_per_fam_per_lin.tab.```. The ```genome_tax_annotation.tab``` file is a tab-delimeted file with 2 columns: genome name and their GTDB (https://gtdb.ecogenomic.org/) taxonomic annotations. ```sp_cov_per_fam_per_lin.tab``` is a tab-delimted file containing the following columns: gene family name, GTDB lineage, specificity, coverage, number of genomes within the GTDB lineage in the collection. 
