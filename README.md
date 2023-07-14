@@ -2,7 +2,7 @@
 
 Here we present the pipeline for computing novel gene families from the proteomes of a collection of genomes, and how to calculate their genomic context conservation.
 
-![Pipeline for dealineating novel gene families exclusive of uncultivated taxa](Capture.PNG)
+![Pipeline for dealineating novel gene families exclusive of uncultivated taxa](Pipeline.png)
 
 The scripts presented here assume that the gene names are formatted as ```>genome_source_of_isolation@genome_name@gene_name@domain|phylum```.
 
