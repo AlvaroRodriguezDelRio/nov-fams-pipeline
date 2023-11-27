@@ -11,7 +11,7 @@ def process_fam(line):
     db = client['DB_NAME']
     col_emapper = db.emapper2
     col_neighs = db.neighs
-
+    col_cards = db.CARD
 
     def get_distances(minicontig,pos_anchor,mini_contig_genes,anchor_strand):
         distances = defaultdict(lambda:{})
@@ -149,10 +149,10 @@ def process_fam(line):
             elif rel_pos >0:
                 distance = distances[rel_pos-1][rel_pos]
 
-            #if neighbour_gene in gene2card:
-                #annotation = gene2card[neighbour_gene]
-                #db_name = "CARD"
-                #cons_per_position,strand_flag_per_pos,neigh_number_per_pos_neg,neigh_number_per_pos,distances_dict = add_to_cons_score(rel_pos,db_name,annotation,n_strand,anchor_strand,strand_flag_per_pos,neigh_number_per_pos_neg,neigh_number_per_pos,distances_dict,i,distance)
+            if neighbour_gene in gene2card:
+                annotation = gene2card[neighbour_gene]
+                db_name = "CARD"
+                cons_per_position,strand_flag_per_pos,neigh_number_per_pos_neg,neigh_number_per_pos,distances_dict = add_to_cons_score(rel_pos,db_name,annotation,n_strand,anchor_strand,strand_flag_per_pos,neigh_number_per_pos_neg,neigh_number_per_pos,distances_dict,i,distance)
 
             if neighbour_gene in gene2annot:
                 for db_name in gene2annot[neighbour_gene]:
