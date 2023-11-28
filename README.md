@@ -1,11 +1,10 @@
-# Pipeline for novel gene family computation and characterization
+# Pipeline for functionally and evolutionarily significant novel (FESNov) gene families computation and characterization
 
 Here we present the pipeline for computing novel gene families from the proteomes of a collection of genomes, and how to calculate their genomic context conservation.
 
 ![Pipeline for dealineating novel gene families exclusive of uncultivated taxa](Pipeline.png)
 
-The starting point of this pipeline consist a the concatenated fasta file with the gene predictions for the genomes of interest. The scripts presented here assume that the gene names are formatted as ```>genome_source_of_isolation@genome_name@gene_name@domain|phylum```. 
-
+The starting point of this pipeline consist a the concatenated fasta file with the gene predictions for the genomes of interest. The scripts presented here assume that the gene names are formatted as ```>genome_source_of_isolation@genome_name@gene_name@domain|phylum```.
 
 ## Requirements
 
@@ -118,10 +117,14 @@ gnl|DEEM|Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     
 
 ```python genomic_context_conservation_table.py > final_scores.tab```. The fields in the table are: family name, db, functional_term, position, score, % cont strand, % contrary strand in between the novel genes and the genes with the functional term, % genes separated more than 100nts in between the novel gene and the neighbors, description.
 
-The ```genomic_context_confidence.py``` code was used to estimate the confidence of the KEGG pathway functional assignations based on genomic context.  
+The ```genomic_context_confidence.py``` code was used to estimate the confidence of the KEGG pathway functional assignations based on genomic context, by measuring how different genomic architectures could correctly predict pathways on known function genes.
 
-## Gene family taxonomic coverage and specificity
+## Gene family taxonomic coverage and specificity for synapomorphy discovery
 
 For running this step, you need to compute the taxonomy of the genomes with GTDB-tk. For calculating the taxonomic coverage and specificity for each gene family on each taxonomic group, we used:
 
 ```python tax_cov_sp.py genome_tax_annotation.tab gene_family_composition.tab > sp_cov_per_fam_per_lin.tab.```. The ```genome_tax_annotation.tab``` file is a tab-delimeted file with 2 columns: genome name and their GTDB (https://gtdb.ecogenomic.org/) taxonomic annotations. ```sp_cov_per_fam_per_lin.tab``` is a tab-delimted file containing the following columns: gene family name, GTDB lineage, specificity, coverage, number of genomes within the GTDB lineage in the collection. 
+
+## Sample discrimination and biomarker discovery 
+
+For testing whether novel families could discriminate between conditions (i.e. control and colorectal cancer samples), we used the ```CRC prediction.R```, which reads an abundance table, with the abundance of each gene family in each sample, and calculates their prediction power using logistic models and machine learning algorithms.      
