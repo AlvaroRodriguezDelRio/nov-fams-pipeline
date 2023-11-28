@@ -127,4 +127,5 @@ For running this step, you need to compute the taxonomy of the genomes with GTDB
 
 ## Sample discrimination and biomarker discovery 
 
-For testing whether novel families could discriminate between conditions (i.e. control and colorectal cancer samples), we used the ```CRC prediction.R```, which reads an abundance table, with the abundance of each gene family in each sample, and calculates their prediction power using logistic models and machine learning algorithms.      
+For testing whether novel families could discriminate between conditions (i.e. control and colorectal cancer samples), we used the ```CRC prediction.R```, which reads an abundance table, with the abundance of each gene family in each sample, and calculates their prediction power using logistic models and machine learning algorithms.
+ 
