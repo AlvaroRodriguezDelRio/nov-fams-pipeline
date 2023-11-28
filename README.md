@@ -46,7 +46,7 @@ We then mapped the gene families against the following reference databases for i
 
 We considered as gene families exclusive from uncultivated taxa those with no member with significant hits to any of these databases.
 
-## Unknown gene familiy from uncultivated taxa filtering filtering 
+## Unknown gene familiy from uncultivated taxa filtering 
 
 For dealineating the unknown gene family predictions of higher quality, we conducted a series of filtering steps, for which we needed to create individual fasta files with the i) CDS sequences and ii) Protein sequences of each gene family. 
 
