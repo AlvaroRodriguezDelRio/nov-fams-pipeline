@@ -77,7 +77,7 @@ train_test_rf = function(data,samples){
   aucs = list()
   accs = list()
   n = 0
-  for (j in 1:20) {
+  for (j in 1:30) {
     
     set.seed(n)
     
