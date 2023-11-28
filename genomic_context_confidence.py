@@ -11,7 +11,7 @@ fams_more_2 = set([i.rstrip() for i in open('microbial_genomes-v1.clustering.fol
 fam2annots = defaultdict(lambda:defaultdict(lambda:set()))
 for line in open("KEGG pathway annotation per gene family.tab"):
     fam,db,ngenes,annot,n_annot,desc = list(map(str.strip,line.split('\t')))
-    if int (ngenes) == int(n_annot) and int(ngenes) > 2 and fam in fams_more_2:
+    if int (ngenes) == int(n_annot) and fam in fams_more_2:
         fam2annots[fam][db].add(annot)
 
 # combination of genomic context parameters to explore
