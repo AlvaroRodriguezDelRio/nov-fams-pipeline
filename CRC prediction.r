@@ -1,12 +1,9 @@
-library(ggplot2)
 library(tidyr)
 library(dplyr)
 library(FactoMineR)
 library(data.table)
 library(caret)
 library(reshape2)
-library(vegan)
-library(patchwork)
 library(ecodist)
 library(MASS)
 library(glmnet)
@@ -17,14 +14,13 @@ library(pROC)
 train_test = function(data, samples){
   
   data_ml = merge(data, samples, by = "sample")
-  data_ml$Group = as.factor(data_ml$Group)
-  data_ml$sample = NULL
-  data_ml$population = NULL
   
   aucs = list()
   accs = list()
   n = 0
+  
   for (j in 1:50) {
+    
     set.seed(n)
     
     # get train and test data
@@ -58,12 +54,9 @@ train_test = function(data, samples){
     aucs[n] = auc$auc
     accs[n] = acc
     
-    
   }
   r = as.data.frame(cbind(aucs,accs))
   names(r) = c("auc","acc")
-  r$auc = as.numeric(r$auc)
-  r$acc = as.numeric(r$acc)
   return(r)
 }
 
@@ -71,17 +64,16 @@ train_test = function(data, samples){
 train_test_rf = function(data,samples){
   
   data_ml = merge(data, samples, by = "sample")
-  data_ml$Group = as.factor(data_ml$Group)
-  data_ml$sample = NULL
-  data_ml$population = NULL
+
   aucs = list()
   accs = list()
   n = 0
+  
   for (j in 1:30) {
     
     set.seed(n)
     
-    # random sample 1000 kos / novel fams 
+    # random sample 1000 gene families
     data_ml_sub = data_ml[,sample(ncol(data_ml), 1000)]
     data_ml_sub$Group = data_ml$Group
     data_ml = data_ml_sub
@@ -116,8 +108,6 @@ train_test_rf = function(data,samples){
   }
   r = as.data.frame(cbind(aucs,accs))
   names(r) = c("auc","acc")
-  r$auc = as.numeric(r$auc)
-  r$acc = as.numeric(r$acc)
   return(r)
 }
 
@@ -127,9 +117,6 @@ train_test_rf = function(data,samples){
 
 # load abundance data
 data = read.csv("Abs_per_family.csv",sep = ',',header = T)
-
-
-# load metadata
 samples = read.table("metadata.tsv",header = T)
 
 
@@ -137,16 +124,12 @@ samples = read.table("metadata.tsv",header = T)
 # logistic regression 70% train - 30% test
 #####
 
-
-# run model
-ttnfam = train_test(nfam_data,samples)
+ttnfam = train_test(data,samples)
 
 #####
 # Random forest 30% train - 70% test, 1000 random nfams
 #####
 
-
-# run model
-ttnfam = train_test_rf(nfam_data,samples)
+ttnfam = train_test_rf(data,samples)
 
 
