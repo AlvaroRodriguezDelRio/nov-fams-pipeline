@@ -20,7 +20,6 @@ samples <- samples %>%
 
 samples$Study = samples$block
 
-
 # merge abundance data and metadata
 data_m = merge(data, samples, by = "sample")
 
