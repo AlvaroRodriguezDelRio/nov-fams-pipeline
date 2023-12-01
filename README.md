@@ -117,7 +117,7 @@ gnl|DEEM|Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     
 
 ```python genomic_context_conservation_table.py > final_scores.tab```. The fields in the table are: family name, db, functional_term, position, score, % cont strand, % contrary strand in between the novel genes and the genes with the functional term, % genes separated more than 100nts in between the novel gene and the neighbors, description.
 
-The ```genomic_context_confidence.py``` code was used to estimate the confidence of the KEGG pathway functional assignations based on genomic context, by measuring how different genomic architectures could correctly predict pathways on known function genes.
+The ```genomic_context_confidence.py``` code was used to estimate the confidence of the KEGG pathway functional assignations based on genomic context, by measuring how different genomic architectures could correctly predict pathways on known function genes. The script reads from the ```final_scores.tab``` table, and also needs a table with confident KEGG pathway annotations per gene family. For each of these gene families, it tests whether different genomic context conservation thresholds correcly predict the original KEGG pathway of the gene family.
 
 ## Gene family taxonomic coverage and specificity for synapomorphy discovery
 
