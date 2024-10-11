@@ -4,8 +4,8 @@ from itertools import groupby
 import itertools
 import json
 
+# load set of KEGG pathways to test
 kpaths_val = (set(i.rstrip().split('\t')[0] for i in open('KEGG_pathways.tab')))
-fams_more_2 = set([i.rstrip() for i in open('microbial_genomes-v1.clustering.folded.parsed.no_dups.fams_more_2_members.txt')])
 
 # get gene families whose all members are annotated to the same term by homology
 fam2annots = defaultdict(lambda:defaultdict(lambda:set()))
@@ -26,9 +26,6 @@ with open("score_per_pos.json") as jfile:
     for line in jfile:
         line = json.loads(line)
         fam = line['fam']
-
-        if fam not in fams_more_2 or fam not in fam2annots:
-            continue
           
         # iterate through KEGG pathway kpath vertical conservation values, per position
         for db,annots in line.items():
