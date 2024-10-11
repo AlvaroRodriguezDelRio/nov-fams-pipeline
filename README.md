@@ -116,7 +116,7 @@ Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     .       +
 ```
 GTDBiso@GB_GCA_003141455@PLMA01000055.1_15@d__Bacteria|p__Chloroflexota NOVPT00U        og      COG0627 -3      0.14285714285714285     0.0     0.0     0.0     Serine hydrolase involved in the detoxification of formaldehyde
 GTDBiso@GB_GCA_003141455@PLMA01000055.1_15@d__Bacteria|p__Chloroflexota NOVPT00U        kpath   01130   2       0.7142857142857143      0.0     0.0     0.0
-GTDBiso@GB_GCA_003141695@PLNE01000019.1_4@d__Bacteria|p__Dormibacterota NOV6H718        kpath   00020   -3      0.375   1.0     1.6666666666666667      2.0     Citrate cycle (TCA cycle)
+GTDBiso@GB_GCA_003141695@PLNE01000019.1_4@d__Bacteria|p__Dormibacterota NOV6H718        kpath   00020   -3      0.375   1.0     1.0      1.0     Citrate cycle (TCA cycle)
 ```
 
 The ```genomic_context_confidence.py``` code was used to estimate the confidence of the KEGG pathway functional assignations based on genomic context, by measuring how different genomic architectures could correctly predict pathways on known function genes. The script reads from the ```final_scores.tab``` table, and also needs a table with confident KEGG pathway annotations per gene family (Fields: family_name,db,ngenes,funct_annot,n_genes_annot_as_funct_annot,funct_annot_desc). For each of these gene families, the script tests whether different genomic context conservation thresholds correcly predict the original KEGG pathway of the gene family.
