@@ -111,7 +111,20 @@ Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     .       +
 - Calculate genomic context conservation:
 
 1) Precompute:
-```python neigh_cons_score.py gene_family_composition.tab > scores.tab```. The ```gene_family_composition.tab``` file is a tab delimeted file with 3 columns: the gene family name, number of members and coma-separated list of members. Then run ```python genomic_context_conservation_table.py scores.tab > final_scores.tab``` for generating a final report of genomic context conservation per gene family. The fields included in the final table are: ```family name, db, functional_term, relative_position, vertical score (% of neighboring genes in the position specified annnotated to the functional term specified), % of neighbors in the position & with the functional_term in contrary strand to the gene family members, number of neighbors in contrary strand in between the novel genes and the genes in the position & with the functional_term, % genes separated more than 100nts in between the novel gene family members and the genes in the position & with the functional_term, description of the functional term```. This is how the table looks like:
+```python neigh_cons_score.py gene_family_composition.tab > scores.tab```. The ```gene_family_composition.tab``` file is a tab delimeted file with 3 columns: the gene family name, number of members and coma-separated list of members. Then run ```python genomic_context_conservation_table.py scores.tab > final_scores.tab``` for generating a final report of genomic context conservation per gene family. The fields included in the final table are:
+
+```
+gebe_family_name
+db (database from which the functional term comes from)
+functional_term
+relative_position (genomic position relative to the gene family members, e.g. -1 means gene immediate before the gene family members)
+vertical score (% of neighboring genes in the position specified annnotated to the functional_term specified)
+% of neighbors in the position & with the functional_term in contrary strand to the gene family members. For each position and functional term for which a score is provided, proportion of gene neighbors that are in contrary orientations than the gene family members. This informs of whether neighbors are in the same strand as the gene family members or not. 1 means that all neigbors in the position specified & showing the functional term are in contrary orientation. 
+number of neighbors in contrary strand in between the novel genes and the genes in the position & with the functional_term. In case the position is not adjaccent to the gene family members (positions +-1), it may be the case that there are genes in between the gene family members and the genes in the position reported that are in contrary strand and break the operon structure. This field informs about this. 
+% genes separated more than 100nts in between the novel gene family members and the genes in the position & with the functional_term, description of the functional term. This field represents the number of genes in between the target position and the gene family members which are more than 100nts away. Higher values indicate that separation between genes is generally higher than 100nts. 
+```
+
+This is how the table looks like:
 
 ```
 GTDBiso@GB_GCA_003141455@PLMA01000055.1_15@d__Bacteria|p__Chloroflexota NOVPT00U        og      COG0627 -3      0.14285714285714285     0.0     0.0     0.0     Serine hydrolase involved in the detoxification of formaldehyde
@@ -119,7 +132,7 @@ GTDBiso@GB_GCA_003141455@PLMA01000055.1_15@d__Bacteria|p__Chloroflexota NOVPT00U
 GTDBiso@GB_GCA_003141695@PLNE01000019.1_4@d__Bacteria|p__Dormibacterota NOV6H718        kpath   00020   -3      0.375   1.0     1.0      1.0     Citrate cycle (TCA cycle)
 ```
 
-The ```genomic_context_confidence.py``` code was used to estimate the confidence of the KEGG pathway functional assignations based on genomic context, by measuring how different genomic architectures could correctly predict pathways on known function genes. The script reads from the ```final_scores.tab``` table, and also needs a table with confident KEGG pathway annotations per gene family (Fields: family_name,db,ngenes,funct_annot,n_genes_annot_as_funct_annot,funct_annot_desc). For each of these gene families, the script tests whether different genomic context conservation thresholds correcly predict the original KEGG pathway of the gene family.
+The ```genomic_context_confidence.py``` code was used to estimate the confidence of the KEGG pathway functional assignations based on genomic context, by measuring how different genomic architectures could correctly predict pathways on known function genes. The script reads from the ```final_scores.tab``` table, and also needs a table with confident KEGG pathway annotations per gene family (Fields: family_name,db from where the functional annotation come from,number of gene family members,funct_annot,n_genes_annot_as_funct_annotated_to_the_funct_annot_specicied,funct_annot_desc). For each of these gene families, the script tests whether different genomic context conservation thresholds correcly predict the original KEGG pathway of the gene family.
 
 ## Gene family taxonomic coverage and specificity for synapomorphy discovery
 
