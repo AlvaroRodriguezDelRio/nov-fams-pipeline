@@ -1,6 +1,6 @@
 # Pipeline for functionally and evolutionarily significant novel (FESNov) gene families computation and characterization
 
-Here we present the pipeline for computing novel gene families from the proteomes of a collection of genomes, and how to calculate their genomic context conservation.
+Here we present the pipeline for computing novel gene families from the proteomes of a collection of genomes, and how to calculate their genomic context conservation. Alternatively, you may also locate which FESNov gene families are present in your sequences by running eggNOG-mapper (http://eggnog-mapper.embl.de/) on any fasta file, selecting the Novel Families database.
 
 ![Pipeline for dealineating novel gene families exclusive of uncultivated taxa](Pipeline.png)
 
