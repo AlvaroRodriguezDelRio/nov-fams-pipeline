@@ -128,6 +128,7 @@ Chip-388_95C1R_METABAT_1       prokka  mRNA    85      783     .       +       .
 Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     .       +       0       ID=Chip-388_95C1R_METABAT_00001;Parent=Chip-388_95C1R_METABAT_00001_gene,Chip-388_95C1R_METABAT_00001_mRNA;eC_number=2.8.1.1;Name=tssA_1;db_xref=COG:COG2897;gene=tssA_1;inference=ab initio prediction:Prodigal:002006,similar to AA sequence:UniProtKB:D4GYM0;locus_tag=Chip-388_95C1R_METABAT_00001;product=Putative thiosulfate sulfurtransferase;protein_id=gnl|DEEM|Chip-388_95C1R_METABAT_00001
 ```
 -```-r``` indicates the position of the genome name in the gene prediction files. This should be ```-1``` if the genome name is indicated in the file name (which should be ```genome_name```.```extenction indicated with --ext```).
+
 -```-e``` indicates the extension to use in the individual fasta files, which will be genome_name.ext
 
 - Upload the ```neighs_per_contig.json``` data to a Mongo (https://www.mongodb.com/) collection with:
@@ -148,7 +149,9 @@ Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     .       +
 ```python -c fat01 -d hotspring_MAGs -f ../clustering/clusters.folded.noEmapper.tsv > scores.tab```.
 
 -```-c``` database connection
+
 -```-d``` database name
+
 -```-f``` indicates the path to the gene clustering file, in folded format (gene family, number of members, members (comma separated))
 
 
@@ -157,10 +160,15 @@ Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     .       +
 
 
 - ```-s```: scores obtained in prev. step
+- 
 - ```-p```: KEGG pathway description file
+
 - ```-k```: KEGG orthology description file
+- 
 - ```-m```: KEGG module description file
+- 
 - ```-e```: EGGNog OG description file
+- 
 - ```-o```: output format [t:tabular,j:JSON]
 
 The resulting table contains the following fields:
@@ -192,7 +200,8 @@ For running this step, you need to compute the taxonomy of the genomes with GTDB
 
 ```python tax_cov_sp.py -t genome2taxonomy.tab -c clusters.folded.novel.tsv > sp_cov_per_fam_per_lin.tab```.
 
-- ```-t``` reads a two column file (tab-separated), with genome name and their associated taxonomy (formatted as in GTDB, https://gtdb.ecogenomic.org/)
+- ```-t``` reads a two column file (tab-separated), with genome name and their associated taxonomy (formatted as in GTDB, https://gtdb.ecogenomic.org/).
+- 
 - ```-f``` indicates the path to the gene clustering file, in folded format (gene family, number of members, members (comma separated))
 
 ```sp_cov_per_fam_per_lin.tab``` is a tab-delimted file containing the following columns: gene family name, GTDB lineage, specificity, coverage, number of genomes within the GTDB lineage in the collection.
