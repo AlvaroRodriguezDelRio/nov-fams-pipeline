@@ -201,7 +201,7 @@ For running this step, you need to compute the taxonomy of the genomes with GTDB
 ```python tax_cov_sp.py -t genome2taxonomy.tab -c clusters.folded.novel.tsv > sp_cov_per_fam_per_lin.tab```.
 
 - ```-t``` reads a two column file (tab-separated), with genome name and their associated taxonomy (formatted as in GTDB, https://gtdb.ecogenomic.org/).
-- 
+  
 - ```-f``` indicates the path to the gene clustering file, in folded format (gene family, number of members, members (comma separated))
 
 ```sp_cov_per_fam_per_lin.tab``` is a tab-delimted file containing the following columns: gene family name, GTDB lineage, specificity, coverage, number of genomes within the GTDB lineage in the collection.
