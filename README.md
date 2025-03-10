@@ -160,15 +160,15 @@ Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     .       +
 
 
 - ```-s```: scores obtained in prev. step
-- 
+  
 - ```-p```: KEGG pathway description file
 
 - ```-k```: KEGG orthology description file
-- 
+  
 - ```-m```: KEGG module description file
-- 
+  
 - ```-e```: EGGNog OG description file
-- 
+ 
 - ```-o```: output format [t:tabular,j:JSON]
 
 The resulting table contains the following fields:
