@@ -66,8 +66,11 @@ For dealineating the unknown gene family predictions of higher quality, we condu
 ```python fasPerFam.py -e .fna -f clusters.folded.novel.tab -p multifasta.fna -n fna```
 
 - ```-e``` indicates the extension to use in the individual fasta files, which will be genome_name.ext
+ 
 - ```-f``` indicates the path to the gene clustering file, in folded format (gene family, number of members, members (comma separated))
+
 - ```-p``` indicates the path to the multifasta gene file
+  
 - ```-n``` indicates the name of the directory in which the fastas will be stored.
 
 After having an individual file for each of the novel gene families (need to do both for CDS and protein sequences), we can start running the quality filtering:
