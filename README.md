@@ -137,16 +137,27 @@ Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     .       +
 
 - Create a Mongo collection with the functional annotation of the neighbors of the members of each gene family:
 
-```python emapper2json.py -e eggnogmapper.annotations.tab | mongoimport --host HOST_NAME -d DATABASE_NAME -c emapper2 --drop (emapper-2.1.5 output)```.
+```python emapper2json.py -e eggnogmapper.annotations.tab | mongoimport --host HOST_NAME -d DATABASE_NAME -c emapper2 --drop```.
 
 - ```-e``` indicates the path to the eggnog-mapper annotation file
+
+After importing this data, we created indexes in the database 
+
+```
+db.emapper2.ensureIndex({'ogs':1})
+db.emapper2.ensureIndex({'kos':1})
+db.emapper2.ensureIndex({'q':1})
+db.emapper2.ensureIndex({'pname':1})
+db.emapper2.ensureIndex({'q_n':1})
+db.emapper2.ensureIndex({'q_g':1})
+```
 
  It is worth noting that creating Mongo databases may not be needed if working with a relatively low number of genomes. Then, the genomic context and gene functional information may be directly loaded into memory.
 
 - Calculate genomic context conservation score:
 
 1) Precompute:
-```python neigh_cons_score.py -c fat01 -d hotspring_MAGs -f ../clustering/clusters.folded.noEmapper.tsv > scores.tab```.
+```python neigh_cons_score.py -c HOST_NAME -d DATABASE_NAME -f ../clustering/clusters.folded.noEmapper.tsv > scores.tab```.
 
 -```-c``` database connection
 
@@ -154,6 +165,9 @@ Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     .       +
 
 -```-f``` indicates the path to the gene clustering file, in folded format (gene family, number of members, members (comma separated))
 
+After importing this data, we created indexes in the database:
+
+```db.neighs.ensureIndex({'genes.g': 1})```
 
 2) format into table or json
 ```scripts/genomic_context_conservation_table.py -s scores.tab -p KEGG_pathways.tab -k kos.tab -m kmod.tab -e eggnog.tsv -o t```
