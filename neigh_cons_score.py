@@ -2,17 +2,28 @@ import sys
 import json
 from collections import defaultdict, Counter
 from pymongo import MongoClient
-from multiprocessing import Pool
 import re
+from optparse import OptionParser
+
+
+parser = OptionParser()
+parser.add_option("-c", "--client", dest="client", type="string",
+                  help="Mongo client name")
+parser.add_option("-d", "--db", dest="db", type="string",
+                  help="Name of database")
+parser.add_option("-f", "--fam", dest="fam", type="string",
+                  help="file with gene family composition (folded format)")
+
+(options, args) = parser.parse_args()
 
 
 def process_fam(line):
-    client = MongoClient('CLIENT CODE')
-    db = client['DB_NAME']
+    client = MongoClient(options.client)
+    db = client[options.db]
     col_emapper = db.emapper2
     col_neighs = db.neighs
-    col_cards = db.CARD
 
+    # calculate distances between genes in mini contig
     def get_distances(minicontig,pos_anchor,mini_contig_genes,anchor_strand):
         distances = defaultdict(lambda:{})
         prev_end = 0
@@ -37,6 +48,7 @@ def process_fam(line):
 
         return distances
 
+    # get emapper annotations for genes in mini contig
     def get_emapper_annotations(names):
         matches = col_emapper.find({'q_g': {'$in': names} })
         gene2annot = defaultdict(dict)
@@ -47,14 +59,7 @@ def process_fam(line):
         return gene2annot
 
 
-    def get_cards(names):
-        matches = col_cards.find({'q_g': {'$in': names} })
-        gene2card = defaultdict()
-        for m in matches:
-            gene2card[m['q_g']] = m['card']
-        return gene2card
-
-
+    # get mini contig
     def get_mini_contig(gene_name, window=3):
 
         # finds the contig containing the gene, and retreives the whole contig array
@@ -64,7 +69,7 @@ def process_fam(line):
 
         if match:
 
-            # Fix unordered contig problem > not needed anymore
+            # Fix unordered contig in case it was not
             sorted_genes = sorted(match['genes'], key=lambda x: x['s'])
             for pos, g in enumerate(sorted_genes):
                 g['p'] = pos
@@ -78,14 +83,6 @@ def process_fam(line):
             return []
 
 
-    def get_cards(names):
-        matches = col_cards.find({'q_g': {'$in': names} })
-        gene2card = defaultdict()
-        for m in matches:
-            gene2card[m['q_g']] = m['card']
-        return gene2card
-
-
     def add_to_cons_score(rel_pos,db_name,annotation,n_strand,anchor_strand,strand_flag_per_pos,neigh_number_per_pos_neg,neigh_number_per_pos,distances_dict,i,distance):
         cons_per_position[rel_pos][db_name][annotation] += 1
         if n_strand != anchor_strand:
@@ -96,12 +93,10 @@ def process_fam(line):
         return cons_per_position,strand_flag_per_pos,neigh_number_per_pos_neg,neigh_number_per_pos,distances_dict
 
 
-    fam,n, members = map(str.strip, line.split('\t'))
+    fam,n,members = map(str.strip, line.split('\t'))
     nseqs = len(list(members.split(',')))
 
     # process each member of the family
-    number_annots = defaultdict(lambda:defaultdict(lambda: Counter()))
-    cog_descs = {}
     cons_per_position = defaultdict(lambda:defaultdict(lambda:Counter()))
     strand_flag_per_pos = defaultdict(lambda:Counter())
     neigh_number_per_pos = defaultdict(lambda:defaultdict(lambda:[]))
@@ -110,6 +105,7 @@ def process_fam(line):
     distances_dict = defaultdict(lambda:defaultdict(lambda:[]))
 
     for i,gene_entry in enumerate(members.split(',')):
+
 
         src,genome,gene,t = gene_entry.split('@')
 
@@ -123,8 +119,6 @@ def process_fam(line):
 
         # query their annotations
         gene2annot = get_emapper_annotations(mini_contig_genes)
-        #gene2card = get_cards(mini_contig_genes)
-
 
         # get strand of query gene and turn around array if -
         anchor_strand = [n['o'] for n in mini_contig if n['g'] == gene]
@@ -137,7 +131,6 @@ def process_fam(line):
         # get distances between genes
         distances = get_distances (mini_contig,pos_anchor,mini_contig_genes,anchor_strand)
 
-        #print (fam,mini_contig_genes)
         for pos,neighbour_gene in enumerate(mini_contig_genes):
             rel_pos = pos - pos_anchor
             number_genes_per_pos[rel_pos] += 1
@@ -148,11 +141,6 @@ def process_fam(line):
                 distance = distances[rel_pos][rel_pos+1]
             elif rel_pos >0:
                 distance = distances[rel_pos-1][rel_pos]
-
-            if neighbour_gene in gene2card:
-                annotation = gene2card[neighbour_gene]
-                db_name = "CARD"
-                cons_per_position,strand_flag_per_pos,neigh_number_per_pos_neg,neigh_number_per_pos,distances_dict = add_to_cons_score(rel_pos,db_name,annotation,n_strand,anchor_strand,strand_flag_per_pos,neigh_number_per_pos_neg,neigh_number_per_pos,distances_dict,i,distance)
 
             if neighbour_gene in gene2annot:
                 for db_name in gene2annot[neighbour_gene]:
@@ -178,6 +166,5 @@ def process_fam(line):
     return array_to_report
 
 
-
-for ln, line in enumerate(open(sys.argv[1])):
+for ln, line in enumerate(open(options.fam)):
     print('\n'.join(process_fam(line)))
