@@ -1,9 +1,18 @@
 import sys
 from collections import defaultdict,Counter
+from optparse import OptionParser
+
+parser = OptionParser()
+parser.add_option("-t", "--taxonomy", dest="tax", type="string",
+                  help="gtdb taxonomy file per genome")
+parser.add_option("-c", "--path_clusters", dest="clus", type="string",
+                  help="file with gene families in tsv format")
+(options, args) = parser.parse_args()
+
 
 lin2num = Counter()
 genome2t = {}
-for line in open(sys.argv[1]):
+for line in open(options.tax):
     genome,tax = list(map(str.strip,line.split('\t')))
     genome2t[genome] = tax
     genome2t[genome.split('.')[0]] = tax
@@ -14,7 +23,7 @@ for line in open(sys.argv[1]):
         lin2num[';'.join(t_comb)] += 1
 
 fam2genomes = defaultdict(lambda:set())
-for line in open(sys.argv[2]):
+for line in open(options.clus):
     fam,n,mems = list(map(str.strip,line.split('\t')))
     n = len(mems.split(','))
     for m in mems.split(','):
