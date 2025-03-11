@@ -1,11 +1,14 @@
 import sys
 import json
 from collections import defaultdict, Counter
-from pymongo import MongoClient
-from multiprocessing import Pool
 import re
+from optparse import OptionParser
 
-# #query_name     seed_eggNOG_ortholog    seed_ortholog_evalue    seed_ortholog_score     eggNOG OGs      narr_og_name    narr_og_cat     narr_og_desc    best_og_name    best_og_cat       best_og_desc    Preferred_name  GOs     EC      KEGG_ko KEGG_Pathway    KEGG_Module     KEGG_Reaction   KEGG_rclass     BRITE   KEGG_TC CAZy    BiGG_Reaction     PFAMs
+
+parser = OptionParser()
+parser.add_option("-e", "--emapper_file", dest="emapper_file", type="string",
+                  help="functional annotation file (eggnog-mapper output)")
+(options, args) = parser.parse_args()
 
 col2name = {
             0: 'q', #query_name
@@ -13,51 +16,27 @@ col2name = {
             2: 'ev', #seed_ortholog_evalue
             3: 'sc', #seed_ortholog_score
             4: 'ogs', #p_ogs VARCHAR,
-            5: '?',#narr_og_name
-            6: '?',#narr_og_cat
-            7:'?',#narr_og_desc
-            8:'best_og_name',#best_og_name
-            9:'boc', #COG_category
-            10:'?',  #Description
-            11: 'pname', #p_name VARCHAR,
-            12: 'gos', #p_go VARCHAR,
-            13: 'ecs', #p_ec VARCHAR,
-            14: 'kos', #p_ko VARCHAR,
-            15: 'kpath', #p_kpath VARCHAR,
-            16: 'kmods', #p_kmod VARCHAR,
-            17: 'kreac', #kreact VARCHAR,
-            18: 'krcls', #p_kclass VARCHAR,
-            19: 'brite', #p_brite VARCHAR,
-            20: 'ktc', #p_ktc VARCHAR,
-            21: 'cazy', #p_cazy VARCHAR,
-            22: 'bigg', #p_biggreact VARCHAR,
-            23: 'pfam' #tax_scope VARCHAR,
+            5: '?',#max_annot_lvl
+            6:'boc', #COG_category
+            7:'?',  #Description
+            8: 'pname', #p_name VARCHAR,
+            9: 'gos', #p_go VARCHAR,
+            10: 'ecs', #p_ec VARCHAR,
+            11: 'kos', #p_ko VARCHAR,
+            12: 'kpath', #p_kpath VARCHAR,
+            13: 'kmods', #p_kmod VARCHAR,
+            14: 'kreac', #kreact VARCHAR,
+            15: 'krcls', #p_kclass VARCHAR,
+            16: 'brite', #p_brite VARCHAR,
+            17: 'ktc', #p_ktc VARCHAR,
+            18: 'cazy', #p_cazy VARCHAR,
+            19: 'bigg', #p_biggreact VARCHAR,
+            20: 'pfam' #tax_scope VARCHAR,
         }
 
-# get genes to report
-hits_texas = set()
-for line in open("../neighs/neigh_genes.txt"):
-    hits_texas.add(line.rstrip())
-
-
-# get annotations from mgv1 db
-client = MongoClient('10.0.3.1')
-db = client['mgv1']
-col_emapper = db.emapper2
-
-def chunks(lst, n):
-    """Yield successive n-sized chunks from lst."""
-    for i in range(0, len(lst), n):
-        yield lst[i:i + n]
-
-for i in chunks(list(hits_texas),100):
-    matches = col_emapper.find({'q_g': {'$in': list(i)}})
-    for m in matches:
-        del m['_id']
-        print (json.dumps(m))
 
 # get annotations from current genomes
-fname = sys.argv[1]
+fname = options.emapper_file
 for line in open(fname):
     if line.startswith('#'):
         continue
