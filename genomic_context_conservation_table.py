@@ -2,6 +2,24 @@ import json
 import sys
 from itertools import groupby
 from collections import defaultdict
+from optparse import OptionParser
+
+parser = OptionParser()
+parser.add_option("-s", "--scores", dest="scores", type="string",
+                  help="output file from neigh_cons_score.py")
+parser.add_option("-k", "--ko", dest="ko", type="string",
+                  help="table with KEGG Orthologous groups descriptions")
+parser.add_option("-p", "--kp", dest="kp", type="string",
+                  help="table with KEGG pathway descriptions")
+parser.add_option("-e", "--eggnog", dest="eggnog", type="string",
+                  help="table with eggNOG OG descriptions")
+parser.add_option("-m", "--km", dest="km", type="string",
+                  help="table with KEGG modules descriptions")
+parser.add_option("-o", "--of", dest="of", type="string",
+                  help="outpur format [j = json, t = tabular]")
+
+(options, args) = parser.parse_args()
+
 
 def readlines(file_):
     for line in open(file_):
@@ -25,7 +43,34 @@ def calculate_number_neg_between(pos,neg_array,positions_annot):
                     number_neg += 1
     return number_neg
 
-with open(sys.argv[1]) as file1:
+
+def load_kegg(d,f):
+    for line in open(f.rstrip()):
+        k,annot = list(map(str.strip,line.split('\t')))
+        d[k] = annot
+    return(d)
+
+# preloads descriptions of annotation labels names
+kegg2annot = {}
+if options.ko:
+    load_kegg(kegg2annot,options.ko)
+
+if options.kp:
+    load_kegg(kegg2annot,options.kp)
+
+if options.ko:
+    load_kegg(kegg2annot,options.km)
+
+if options.eggnog:
+    for line in open(options.eggnog):
+        line = list(map(str.rstrip,line.split('\t')))
+        if len(line) == 4:
+            tr,kegg,tr,annot = line
+            kegg2annot[kegg] = annot
+
+
+
+with open(options.scores) as file1:
     for k, g in groupby(file1, key=lambda x:x.split('\t')[0]):
         neg_strand_pos = defaultdict(lambda:set())
         more_x_nucleotide_distance = defaultdict(lambda:set())
@@ -85,6 +130,10 @@ with open(sys.argv[1]) as file1:
                 desc = ''
                 if annot.split('@')[0] in kegg2annot:
                     desc = kegg2annot[annot.split('@')[0]]
-                print ('\t'.join(list(map(str,[fam,db,annot.split('@')[0],pos,score,int(num_contrary_strand)/int(number_genes_with_annot),int(number_neg_between)/int(number_genes_with_annot),int(number_genes_high_distance)/int(number_genes_with_annot),desc]))))
-                cog_dict = {'n':annot.split('@')[0],'score':float(score),"mean_num_in_opposite_strand":float(int(num_contrary_strand)/int(number_genes_with_annot)),"mean_num_pos_opposite_strand_between":float(int(number_neg_between)/int(number_genes_with_annot)),"pos":int(pos),"num_h_dis":float(int(number_genes_high_distance)/int(number_genes_with_annot))}
-                fam2info[db].append(cog_dict)
+                if options.of == 't':
+                    print ('\t'.join(list(map(str,[fam,db,annot.split('@')[0],pos,score,int(num_contrary_strand)/int(number_genes_with_annot),int(number_neg_between)/int(number_genes_with_annot),int(number_genes_high_distance)/int(number_genes_with_annot),desc]))))
+
+                elif options.of == 'j':
+                    cog_dict = {'n':annot.split('@')[0],'score':float(score),"mean_num_in_opposite_strand":float(int(num_contrary_strand)/int(number_genes_with_annot)),"mean_num_pos_opposite_strand_between":float(int(number_neg_between)/int(number_genes_with_annot)),"pos":int(pos),"num_h_dis":float(int(number_genes_high_distance)/int(number_genes_with_annot))}
+                    fam2info[db].append(cog_dict)
+                    sys.stdout.write(json.dumps(fam2info, separators=(',',':'))+"\n")
