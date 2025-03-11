@@ -146,7 +146,7 @@ Chip-388_95C1R_METABAT_1       Prodigal:002006 CDS     85      783     .       +
 - Calculate genomic context conservation score:
 
 1) Precompute:
-```python -c fat01 -d hotspring_MAGs -f ../clustering/clusters.folded.noEmapper.tsv > scores.tab```.
+```python neigh_cons_score.py -c fat01 -d hotspring_MAGs -f ../clustering/clusters.folded.noEmapper.tsv > scores.tab```.
 
 -```-c``` database connection
 
